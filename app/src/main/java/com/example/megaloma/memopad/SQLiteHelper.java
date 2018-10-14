@@ -19,8 +19,9 @@ public class SQLiteHelper extends SQLiteOpenHelper {
             "CREATE TABLE " + TABLE_NAME + " (" +
                     MemoTable._ID + " INTEGER PRIMARY KEY," +
                     MemoTable.COLUMN_NAME_MEMO_DATE + "TEXT, " +
-                    MemoTable.COLUMN_NAME_MEMO_TITLE + " TEXT," +
-                    MemoTable.COLUMN_NAME_MEMO_CONTENT + " TEXT)";
+                    MemoTable.COLUMN_NAME_MEMO_TITLE + " TEXT, " +
+                    MemoTable.COLUMN_NAME_MEMO_CONTENT + " TEXT, " +
+                    MemoTable.COLUMN_NAME_MEMO_FAV + "TEXT)";
 
     private static final String SQL_DELETE_ENTRIES =
             "DROP TABLE IF EXISTS " + TABLE_NAME;

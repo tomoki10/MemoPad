@@ -13,5 +13,6 @@ public final class DBDesign {
         public static final String COLUMN_NAME_MEMO_DATE = "write_date";
         public static final String COLUMN_NAME_MEMO_TITLE = "memo_title";
         public static final String COLUMN_NAME_MEMO_CONTENT = "memo_content";
+        public static final String COLUMN_NAME_MEMO_FAV = "fav";
     }
 }
