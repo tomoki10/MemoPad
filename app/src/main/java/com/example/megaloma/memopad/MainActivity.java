@@ -1,7 +1,9 @@
 package com.example.megaloma.memopad;
 
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -10,6 +12,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,16 +27,15 @@ public class MainActivity extends AppCompatActivity
     // 画面上に表示されるメモを保持するリスト
     ArrayAdapter<String> adapter;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         //メモ追加用のボタン
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -45,29 +47,36 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        //追加分
-        adapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1);
+        //アダプタの追加　後にDBから取得して表示
+        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1);
         adapter.add("メモした日付　" + "メモのタイトル１ ");
         adapter.add("メモの画面２");
         adapter.add("メモの画面３");
 
-        ListView listView = (ListView) findViewById(R.id.listView1);
+        ListView listView = findViewById(R.id.listView1);
         //ListView set ArrayAdapter
         listView.setAdapter(adapter);
+
+        //DB呼び出し
+        SQLiteHelper sqLiteHelper     = new SQLiteHelper(this);
+        SQLiteDatabase sqLiteDatabase = sqLiteHelper.getWritableDatabase();
+        sqLiteHelper.memoInsert(sqLiteDatabase, "2018_11_07", "テスト用タイトル", "コンテンツをここにいれる");
+        Log.d("TEST_LOG",sqLiteHelper.selectMemo(sqLiteDatabase));
+
     }
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -95,7 +104,7 @@ public class MainActivity extends AppCompatActivity
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
@@ -113,7 +122,7 @@ public class MainActivity extends AppCompatActivity
 
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
