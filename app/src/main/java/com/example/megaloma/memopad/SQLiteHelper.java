@@ -6,6 +6,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static com.example.megaloma.memopad.DBDesign.MemoTable;
 
 public class SQLiteHelper extends SQLiteOpenHelper {
@@ -51,25 +54,23 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     }
 
     //SELECTを発行する
-    String selectMemo(SQLiteDatabase db){
-        String selectSql = "SELECT * FROM " + TABLE_NAME;
+    List<String> selectMemo(SQLiteDatabase db, String colName){
+        String selectSql = "SELECT "+ colName +" FROM " + TABLE_NAME;
         try (Cursor cursor = db.rawQuery(selectSql, null)) {
             return readCursor(cursor);
         }
     }
 
     //検索結果を読み込む
-    private String readCursor(Cursor cursor ){
+    private List<String> readCursor(Cursor cursor ){
         //カーソル開始位置を先頭にする
         cursor.moveToFirst();
-        StringBuilder sb = new StringBuilder();
+        List<String> list = new ArrayList<>();
         for (int i = 1; i <= cursor.getCount(); i++) {
             //SQL文の結果から、必要な値を取り出す
-            sb.append(cursor.getString(1));
-            sb.append(cursor.getString(2));
-            sb.append(cursor.getString(3));
+            list.add(cursor.getString(0));
             cursor.moveToNext();
         }
-        return sb.toString();
+        return list;
     }
 }
