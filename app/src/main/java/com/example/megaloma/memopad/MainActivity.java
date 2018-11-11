@@ -12,7 +12,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -80,7 +79,6 @@ public class MainActivity extends AppCompatActivity
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Log.d("TEST_LOG",String.valueOf(id));
                 //開きたいメモの番号(position)を付与して詳細画面に移動
                 Intent intent = new Intent(getApplication(), MemoDetailActivity.class);
                 intent.putExtra("ID",position);
