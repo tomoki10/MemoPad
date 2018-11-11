@@ -12,9 +12,11 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -67,12 +69,24 @@ public class MainActivity extends AppCompatActivity
         //アダプタの追加　後にDBから取得して表示
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1);
 
+        //取得したDBのカラムをセット
         for(int i=0;i<selectTitle.size();i++){
             adapter.add(selectDate.get(i) + "　" + selectTitle.get(i));
         }
-
-        ListView listView = findViewById(R.id.listView1);
+        final ListView listView = findViewById(R.id.listView1);
         listView.setAdapter(adapter);
+
+        //Itemごとにクリックリスナーを設定
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.d("TEST_LOG",String.valueOf(id));
+                //開きたいメモの番号(position)を付与して詳細画面に移動
+                Intent intent = new Intent(getApplication(), MemoDetailActivity.class);
+                intent.putExtra("ID",position);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override
