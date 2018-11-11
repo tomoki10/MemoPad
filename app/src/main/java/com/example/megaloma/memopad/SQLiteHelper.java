@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +23,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 
     private static final String SQL_CREATE_ENTRIES =
             "CREATE TABLE " + TABLE_NAME + " (" +
-                    MemoTable._ID + " INTEGER PRIMARY KEY, " +
+                    MemoTable._ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
                     MemoTable.MEMO_DATE + " TEXT, " +
                     MemoTable.MEMO_TITLE + " TEXT, " +
                     MemoTable.MEMO_CONTENT + " TEXT, " +
@@ -57,19 +58,41 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     List<String> selectMemo(SQLiteDatabase db, String colName){
         String selectSql = "SELECT "+ colName +" FROM " + TABLE_NAME;
         try (Cursor cursor = db.rawQuery(selectSql, null)) {
-            return readCursor(cursor);
+            return readCursor(cursor, "");
         }
     }
 
+    //条件指定でSELECTを発行する
+    List<String> selectMemo(SQLiteDatabase db, String colName, String whereCol,String colCondition){
+        String selectSql = String.format("SELECT %s FROM %s WHERE %s = %s", colName, TABLE_NAME, whereCol, colCondition);
+        Log.d("TEST",selectSql);
+        try (Cursor cursor = db.rawQuery(selectSql, null)) {
+            return readCursor(cursor,"where");
+        }
+    }
+
+
     //検索結果を読み込む
-    private List<String> readCursor(Cursor cursor ){
+    private List<String> readCursor(Cursor cursor, String condition){
         //カーソル開始位置を先頭にする
         cursor.moveToFirst();
         List<String> list = new ArrayList<>();
-        for (int i = 1; i <= cursor.getCount(); i++) {
-            //SQL文の結果から、必要な値を取り出す
-            list.add(cursor.getString(0));
-            cursor.moveToNext();
+
+        switch(condition){
+            //条件なしの場合
+            case "":
+                for (int i = 0; i < cursor.getCount(); i++) {
+                    //SQL文の結果から、必要な値を取り出す
+                    list.add(cursor.getString(0));
+                    cursor.moveToNext();
+                }
+                break;
+            case "where":
+                for (int i = 0; i < cursor.getCount(); i++) {
+                    list.add(cursor.getString(i));
+                    cursor.moveToNext();
+                }
+                break;
         }
         return list;
     }
