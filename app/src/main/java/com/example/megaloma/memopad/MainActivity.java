@@ -12,12 +12,13 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -56,22 +57,22 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        //アダプタの追加　後にDBから取得して表示
-        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1);
-        adapter.add("メモした日付　" + "メモのタイトル１ ");
-        adapter.add("メモの画面２");
-        adapter.add("メモの画面３");
-
-        ListView listView = findViewById(R.id.listView1);
-        //ListView set ArrayAdapter
-        listView.setAdapter(adapter);
-
         //DB呼び出し
         SQLiteHelper sqLiteHelper     = new SQLiteHelper(this);
         SQLiteDatabase sqLiteDatabase = sqLiteHelper.getWritableDatabase();
-        sqLiteHelper.memoInsert(sqLiteDatabase, "2018_11_07", "テスト用タイトル", "コンテンツをここにいれる");
-        Log.d("TEST_LOG",sqLiteHelper.selectMemo(sqLiteDatabase));
+        //sqLiteHelper.memoInsert(sqLiteDatabase, "2018_11_07", "テスト用タイトル", "コンテンツをここにいれる");
+        List<String> selectTitle = sqLiteHelper.selectMemo(sqLiteDatabase,"title");
+        List<String> selectDate = sqLiteHelper.selectMemo(sqLiteDatabase,"write_date");
 
+        //アダプタの追加　後にDBから取得して表示
+        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1);
+
+        for(int i=0;i<selectTitle.size();i++){
+            adapter.add(selectDate.get(i) + "　" + selectTitle.get(i));
+        }
+
+        ListView listView = findViewById(R.id.listView1);
+        listView.setAdapter(adapter);
     }
 
     @Override
