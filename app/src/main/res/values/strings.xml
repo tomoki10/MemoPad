@@ -9,10 +9,6 @@
     <string name="title_activity_memo_detail">MemoDetailActivity</string>
     <string name="title">title:</string>
     <string name="large_text">
-        "Material is the metaphor.\n\n"
-
-        "A material metaphor is the unifying theory of a rationalized space and a system of motion."
-        "The material is grounded in tactile reality, inspired by the study of paper and ink, yet "
-        "technologically advanced and open to imagination and magic.\n"
+        "Material is the metaphor.\n"
     </string>
 </resources>

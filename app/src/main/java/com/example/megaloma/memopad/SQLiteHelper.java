@@ -46,7 +46,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 
     }
 
-    void memoInsert(SQLiteDatabase db, String date, String title, String content){
+    void insertMemo(SQLiteDatabase db, String date, String title, String content){
         ContentValues values = new ContentValues();
         values.put("write_date", date); //DB設定後修正
         values.put("title", title);

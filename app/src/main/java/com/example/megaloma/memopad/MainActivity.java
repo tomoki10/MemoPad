@@ -57,12 +57,11 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-
     @Override
     protected void onPostResume() {
         super.onPostResume();
         //DB呼び出し
-        SQLiteHelper sqLiteHelper     = new SQLiteHelper(this);
+        sqLiteHelper     = new SQLiteHelper(this);
         SQLiteDatabase sqLiteDatabase = sqLiteHelper.getWritableDatabase();
 
         List<String> selectTitle = sqLiteHelper.selectMemo(sqLiteDatabase,"title");

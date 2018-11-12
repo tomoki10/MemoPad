@@ -15,6 +15,7 @@
         android:focusableInTouchMode="true"
         android:orientation="vertical">
         <EditText
+            android:id="@+id/memo_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
@@ -22,8 +23,12 @@
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
             android:text="@string/title"
-            android:textSize="20sp"/>
+            android:textSize="20sp"
+            android:autofillHints="タイトル"
+            android:inputType=""
+            tools:ignore="LabelFor" />
         <EditText
+            android:id="@+id/memo_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
@@ -31,7 +36,10 @@
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
             android:text="@string/large_text"
-            android:textSize="20sp"/>
+            android:textSize="20sp"
+            android:autofillHints="メモ内容"
+            android:inputType=""
+            tools:ignore="LabelFor" />
 
     </LinearLayout>
 
