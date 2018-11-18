@@ -15,14 +15,29 @@ import java.util.Objects;
 
 public class MemoDetailActivity extends AppCompatActivity {
 
+    //DB呼び出し
+    SQLiteHelper sqLiteHelper;
+    SQLiteDatabase sqLiteDatabase;
+
+    //保存ボタンの実装
+    FloatingActionButton fab;
+
+    //折りたたみツールバー用
+    Toolbar toolbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_memo_detail);
+    }
 
+    //画面で表示するオブジェクトを定義
+    @Override
+    protected void onResume() {
+        super.onResume();
         //DB呼び出し
-        SQLiteHelper sqLiteHelper     = new SQLiteHelper(this);
-        SQLiteDatabase sqLiteDatabase = sqLiteHelper.getWritableDatabase();
+        sqLiteHelper     = new SQLiteHelper(this);
+        sqLiteDatabase = sqLiteHelper.getWritableDatabase();
 
         //メモの全体を格納する
         List<String> selectRow;
@@ -37,13 +52,12 @@ public class MemoDetailActivity extends AppCompatActivity {
             title = selectRow.get(0);
         }
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle(title);
         setSupportActionBar(toolbar);
 
-
         //保存ボタンの実装
-        FloatingActionButton fab = findViewById(R.id.fab);
+        fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -74,9 +88,18 @@ public class MemoDetailActivity extends AppCompatActivity {
 
                 Intent intent = new Intent(getApplication(), MainActivity.class);
                 startActivity(intent);
-
             }
         });
-
     }
+
+    //画面で使用したオブジェクトの初期化
+    @Override
+    protected void onPause() {
+        super.onPause();
+        sqLiteHelper = null;
+        sqLiteDatabase = null;
+        fab = null;
+        toolbar = null;
+    }
+
 }

@@ -24,9 +24,11 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     // DB を操作するためのインスタンス
-    private SQLiteHelper sqLiteHelper = null;
+    private SQLiteHelper sqLiteHelper;
+    private SQLiteDatabase sqLiteDatabase;
     // 画面上に表示されるメモを保持するリスト
     ArrayAdapter<String> adapter;
+    ListView listView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,11 +60,11 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    protected void onPostResume() {
-        super.onPostResume();
+    protected void onResume() {
+        super.onResume();
         //DB呼び出し
         sqLiteHelper     = new SQLiteHelper(this);
-        SQLiteDatabase sqLiteDatabase = sqLiteHelper.getWritableDatabase();
+        sqLiteDatabase = sqLiteHelper.getWritableDatabase();
 
         List<String> selectTitle = sqLiteHelper.selectMemo(sqLiteDatabase,"title");
         List<String> selectDate = sqLiteHelper.selectMemo(sqLiteDatabase,"write_date");
@@ -74,7 +76,7 @@ public class MainActivity extends AppCompatActivity
         for(int i=0;i<selectTitle.size();i++){
             adapter.add(selectDate.get(i) + "　" + selectTitle.get(i));
         }
-        final ListView listView = findViewById(R.id.listView1);
+        listView = findViewById(R.id.listView1);
         listView.setAdapter(adapter);
 
         //Itemごとにクリックリスナーを設定
@@ -87,6 +89,16 @@ public class MainActivity extends AppCompatActivity
                 startActivity(intent);
             }
         });
+    }
+
+    //画面遷移時にオブジェクトを初期化
+    @Override
+    protected void onPause() {
+        super.onPause();
+        sqLiteHelper = null;
+        sqLiteDatabase = null;
+        adapter = null;
+        listView = null;
     }
 
     @Override
