@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
@@ -24,6 +23,10 @@ public class MemoDetailActivity extends AppCompatActivity {
 
     //折りたたみツールバー用
     Toolbar toolbar;
+
+    //メモのタイトルと内容
+    EditText editTitle;
+    EditText editContent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,17 +47,27 @@ public class MemoDetailActivity extends AppCompatActivity {
 
         // メモのtitleを格納する
         String title = "";
+        String content = "";
 
         //メイン画面のItemから遷移している場合
         if(getIntent().hasExtra("ID")){
             final int id = Objects.requireNonNull(getIntent().getExtras()).getInt("ID");
-            selectRow = sqLiteHelper.selectMemo(sqLiteDatabase,"title", "id",String.valueOf(id));
+            selectRow = sqLiteHelper.selectMemo(sqLiteDatabase,"title, content", "id",String.valueOf(id));
             title = selectRow.get(0);
+            content = selectRow.get(1);
         }
 
         toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle(title);
         setSupportActionBar(toolbar);
+
+        //メモのタイトルを取得
+        editTitle = findViewById(R.id.memo_title);
+        editTitle.setText(title);
+
+        //メモの内容を取得
+        editContent = findViewById(R.id.memo_content);
+        editContent.setText(content);
 
         //保存ボタンの実装
         fab = findViewById(R.id.fab);
@@ -62,13 +75,9 @@ public class MemoDetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //メモのタイトルを取得
-                EditText editTitle = findViewById(R.id.memo_title);
-                Log.d("TEST onClick",String.valueOf(editTitle.getText()));
                 String title = String.valueOf(editTitle.getText());
 
                 //メモの内容を取得
-                EditText editContent = findViewById(R.id.memo_content);
-                Log.d("TEST onClick",String.valueOf(editContent.getText()));
                 String content = String.valueOf(editContent.getText());
 
                 //DB呼び出し
@@ -100,6 +109,8 @@ public class MemoDetailActivity extends AppCompatActivity {
         sqLiteDatabase = null;
         fab = null;
         toolbar = null;
+        editTitle = null;
+        editContent = null;
     }
 
 }

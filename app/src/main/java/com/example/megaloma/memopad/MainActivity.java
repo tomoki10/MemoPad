@@ -69,10 +69,9 @@ public class MainActivity extends AppCompatActivity
         List<String> selectTitle = sqLiteHelper.selectMemo(sqLiteDatabase,"title");
         List<String> selectDate = sqLiteHelper.selectMemo(sqLiteDatabase,"write_date");
 
-        //アダプタの追加　後にDBから取得して表示
+        //取得したDBのカラムをセット
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1);
 
-        //取得したDBのカラムをセット
         for(int i=0;i<selectTitle.size();i++){
             adapter.add(selectDate.get(i) + "　" + selectTitle.get(i));
         }

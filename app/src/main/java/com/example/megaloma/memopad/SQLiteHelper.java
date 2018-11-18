@@ -80,7 +80,6 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         }
     }
 
-
     //検索結果を読み込む
     private List<String> readCursor(Cursor cursor, String condition){
         //カーソル開始位置を先頭にする
@@ -88,7 +87,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         List<String> list = new ArrayList<>();
 
         switch(condition){
-            //条件なしの場合
+            //条件なしの場合列を取り出す
             case "":
                 for (int i = 0; i < cursor.getCount(); i++) {
                     //SQL文の結果から、必要な値を取り出す
@@ -96,10 +95,11 @@ public class SQLiteHelper extends SQLiteOpenHelper {
                     cursor.moveToNext();
                 }
                 break;
+             //条件ありの場合行を取り出す
             case "where":
-                for (int i = 0; i < cursor.getCount(); i++) {
+                Log.d("getColumnCount", String.valueOf(cursor.getColumnCount()));
+                for (int i = 0; i < cursor.getColumnCount(); i++) {
                     list.add(cursor.getString(i));
-                    cursor.moveToNext();
                 }
                 break;
         }
