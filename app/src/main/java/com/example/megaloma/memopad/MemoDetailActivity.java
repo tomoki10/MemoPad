@@ -63,9 +63,9 @@ public class MemoDetailActivity extends AppCompatActivity {
 
                 //メイン画面のItemから遷移している場合
                 if(getIntent().hasExtra("ID")){
-                    //後日実装
                     final int id = Objects.requireNonNull(getIntent().getExtras()).getInt("ID");
-                    sqLiteHelper.selectMemo(sqLiteDatabase,"title", "id",String.valueOf(id));
+                    sqLiteHelper.selectMemo(sqLiteDatabase,"title", "id", String.valueOf(id));
+                    sqLiteHelper.updateMemo(sqLiteDatabase, String.valueOf(id), title, content);
                 }
                 //新規ボタンから遷移している場合
                 else{

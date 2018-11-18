@@ -46,12 +46,21 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 
     }
 
+    //新規メモの保存
     void insertMemo(SQLiteDatabase db, String date, String title, String content){
         ContentValues values = new ContentValues();
         values.put("write_date", date); //DB設定後修正
         values.put("title", title);
         values.put("content", content);
         db.insert(TABLE_NAME, null, values);
+    }
+
+    //メモ内容の更新
+    void updateMemo(SQLiteDatabase db, String id, String title,String content){
+        ContentValues values = new ContentValues();
+        values.put("title", title);
+        values.put("content", content);
+        db.update(TABLE_NAME, values,"id = "+id,null);
     }
 
     //SELECTを発行する
