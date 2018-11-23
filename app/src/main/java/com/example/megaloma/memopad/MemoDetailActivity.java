@@ -9,7 +9,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.EditText;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 
 public class MemoDetailActivity extends AppCompatActivity {
@@ -92,7 +95,9 @@ public class MemoDetailActivity extends AppCompatActivity {
                 }
                 //新規ボタンから遷移している場合
                 else{
-                    sqLiteHelper.insertMemo(sqLiteDatabase, "20181112", title, content);
+                    Calendar calender = Calendar.getInstance();
+                    SimpleDateFormat sdf = new SimpleDateFormat("YYYYMMdd", Locale.getDefault());
+                    sqLiteHelper.insertMemo(sqLiteDatabase, sdf.format(calender.getTime()), title, content);
                 }
 
                 Intent intent = new Intent(getApplication(), MainActivity.class);
