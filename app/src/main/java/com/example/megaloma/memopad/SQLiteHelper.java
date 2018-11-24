@@ -80,6 +80,15 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         }
     }
 
+    //条件指定でDELETE文を発行
+    void deleteMemo(SQLiteDatabase db, String whereCol,String colCondition){
+        String deleteSql = String.format("DELETE FROM %s WHERE %s = %s", TABLE_NAME, whereCol, colCondition);
+        Log.d("TEST", deleteSql);
+        try (Cursor cursor = db.rawQuery(deleteSql, null)) {
+            cursor.moveToFirst();
+        }
+    }
+
     //検索結果を読み込む
     private List<String> readCursor(Cursor cursor, String condition){
         //カーソル開始位置を先頭にする

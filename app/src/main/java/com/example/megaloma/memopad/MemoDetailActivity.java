@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 
@@ -89,9 +91,9 @@ public class MemoDetailActivity extends AppCompatActivity {
 
                 //メイン画面のItemから遷移している場合
                 if(getIntent().hasExtra("ID")){
-                    final int id = Objects.requireNonNull(getIntent().getExtras()).getInt("ID");
-                    sqLiteHelper.selectMemo(sqLiteDatabase,"title", "id", String.valueOf(id));
-                    sqLiteHelper.updateMemo(sqLiteDatabase, String.valueOf(id), title, content);
+                    final int selectId = Objects.requireNonNull(getIntent().getExtras()).getInt("ID");
+                    sqLiteHelper.selectMemo(sqLiteDatabase,"title", "id", String.valueOf(selectId));
+                    sqLiteHelper.updateMemo(sqLiteDatabase, String.valueOf(selectId), title, content);
                 }
                 //新規ボタンから遷移している場合
                 else{
@@ -116,6 +118,33 @@ public class MemoDetailActivity extends AppCompatActivity {
         toolbar = null;
         editTitle = null;
         editContent = null;
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        Intent intent = new Intent(getApplication(), MainActivity.class);
+        //削除が押下された場合
+        if (id == R.id.action_settings_memo_detail) {
+            //メイン画面のItemから遷移している場合
+            //新規ボタンから遷移している場合、削除せず元の画面に戻る
+            if(getIntent().hasExtra("ID")){
+                final int deleteId = Objects.requireNonNull(getIntent().getExtras()).getInt("ID");
+                sqLiteHelper.deleteMemo(sqLiteDatabase, "id", String.valueOf(deleteId));
+            }
+            startActivity(intent);
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    //削除ボタンとして利用
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_memo_detail, menu);
+        return true;
     }
 
 }
