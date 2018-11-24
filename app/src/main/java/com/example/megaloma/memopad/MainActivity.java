@@ -66,6 +66,8 @@ public class MainActivity extends AppCompatActivity
         sqLiteHelper     = new SQLiteHelper(this);
         sqLiteDatabase = sqLiteHelper.getWritableDatabase();
 
+        //データの格納(今後DAO化)
+        final List<String> selectId = sqLiteHelper.selectMemo(sqLiteDatabase,"id");
         List<String> selectTitle = sqLiteHelper.selectMemo(sqLiteDatabase,"title");
         List<String> selectDate = sqLiteHelper.selectMemo(sqLiteDatabase,"write_date");
 
@@ -82,9 +84,9 @@ public class MainActivity extends AppCompatActivity
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //開きたいメモの番号(position)を付与して詳細画面に移動
+                //開きたいメモの番号(レコードのID)を付与して詳細画面に移動
                 Intent intent = new Intent(getApplication(), MemoDetailActivity.class);
-                intent.putExtra("ID",position);
+                intent.putExtra("ID", Integer.valueOf(selectId.get(position)));
                 startActivity(intent);
             }
         });
