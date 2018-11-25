@@ -65,7 +65,8 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 
     //SELECTを発行する
     List<String> selectMemo(SQLiteDatabase db, String colName){
-        String selectSql = "SELECT "+ colName +" FROM " + TABLE_NAME;
+        String selectSql = String.format("SELECT %s FROM %s ORDER BY %s DESC, %s DESC", colName, TABLE_NAME,
+                MemoTable.MEMO_DATE, MemoTable._ID);
         try (Cursor cursor = db.rawQuery(selectSql, null)) {
             return readCursor(cursor, "");
         }

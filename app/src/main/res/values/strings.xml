@@ -8,8 +8,8 @@
     <string name="action_settings">Settings</string>
     <string name="action_delete">Delete</string>
     <string name="title_activity_memo_detail">MemoDetailActivity</string>
-    <string name="title">title:</string>
+    <string name="title">メモのタイトルを入力</string>
     <string name="large_text">
-        "Material is the metaphor.\n"
+        "メモの内容を入力"
     </string>
 </resources>
