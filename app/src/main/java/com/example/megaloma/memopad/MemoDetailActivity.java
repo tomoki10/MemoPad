@@ -52,7 +52,7 @@ public class MemoDetailActivity extends AppCompatActivity {
 
         // メモのtitleを格納する
         String title = "";
-        String content;
+        String content = "";
 
         editTitle = findViewById(R.id.memo_title);
         editContent = findViewById(R.id.memo_content);
@@ -63,10 +63,11 @@ public class MemoDetailActivity extends AppCompatActivity {
             selectRow = sqLiteHelper.selectMemo(sqLiteDatabase,"title, content", "id",String.valueOf(id));
             title = selectRow.get(0);
             content = selectRow.get(1);
-            //メモのタイトルと内容を設定
-            editTitle.setText(title);
-            editContent.setText(content);
         }
+
+        //メモのタイトルと内容を設定
+        editTitle.setText(title);
+        editContent.setText(content);
 
         //ツールバーにタイトルを設定
         toolbar = findViewById(R.id.toolbar);
