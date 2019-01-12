@@ -99,7 +99,7 @@ public class MemoDetailActivity extends AppCompatActivity {
                 //新規ボタンから遷移している場合
                 else{
                     Calendar calender = Calendar.getInstance();
-                    SimpleDateFormat sdf = new SimpleDateFormat("YYYYMMdd", Locale.getDefault());
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd", Locale.getDefault());
                     sqLiteHelper.insertMemo(sqLiteDatabase, sdf.format(calender.getTime()), title, content);
                 }
 
