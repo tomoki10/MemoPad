@@ -21,6 +21,7 @@ import com.example.megaloma.memopad.db.AppRoomDatabase;
 import com.example.megaloma.memopad.db.MemoDetail;
 
 import java.util.List;
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -144,7 +145,7 @@ public class MainActivity extends AppCompatActivity
             list = null;
 
             appRoomDatabase = AppRoomDatabase.getDatabase(getApplicationContext());
-            list = appRoomDatabase.memoDetailDao().loadMemoAll();
+            list = Objects.requireNonNull(appRoomDatabase).memoDetailDao().loadMemoAll();
             return true;
         }
 
@@ -158,7 +159,7 @@ public class MainActivity extends AppCompatActivity
                 adapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1);
 
                 for(int i=0;i<list.size();i++){
-                    adapter.add(list.get(i).write_date + "　" + list.get(i).title);
+                    adapter.add(list.get(i).getWrite_date() + "　" + list.get(i).getTitle());
                 }
                 listView = findViewById(R.id.listView1);
                 listView.setAdapter(adapter);
@@ -167,7 +168,7 @@ public class MainActivity extends AppCompatActivity
                 listView.setOnItemClickListener((parent, view, position, id) -> {
                     //開きたいメモの番号(レコードのID)を付与して詳細画面に移動
                     Intent intent = new Intent(getApplication(), MemoDetailActivity.class);
-                    intent.putExtra("ID", Integer.valueOf(list.get(position).id));
+                    intent.putExtra("ID", Integer.valueOf(list.get(position).getId()));
                     startActivity(intent);
                 });
             }

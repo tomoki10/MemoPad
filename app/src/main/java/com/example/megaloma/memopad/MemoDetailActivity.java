@@ -65,13 +65,13 @@ public class MemoDetailActivity extends AppCompatActivity {
 
             //挿入・更新用のDAO
             MemoDetail memoDetail = new MemoDetail();
-            memoDetail.title = title;
-            memoDetail.content = content;
+            memoDetail.setTitle(title);
+            memoDetail.setContent(content);
 
             //メイン画面のItemから遷移している場合
             if(getIntent().hasExtra("ID")){
                 //既存のメモを更新する
-                memoDetail.id = Objects.requireNonNull(getIntent().getExtras()).getInt("ID");
+                memoDetail.setId(Objects.requireNonNull(getIntent().getExtras()).getInt("ID"));
                 memoUpdateTask = new MemoUpdateTask();
                 memoUpdateTask.execute(memoDetail);
             }
@@ -80,7 +80,7 @@ public class MemoDetailActivity extends AppCompatActivity {
                 //新規の場合は年月日を設定
                 Calendar calender = Calendar.getInstance();
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd", Locale.getDefault());
-                memoDetail.write_date = sdf.format(calender.getTime());
+                memoDetail.setWrite_date(sdf.format(calender.getTime()));
                 memoInsertTask = new MemoInsertTask();
                 memoInsertTask.execute(memoDetail);
             }
@@ -117,7 +117,7 @@ public class MemoDetailActivity extends AppCompatActivity {
                 final int deleteId = Objects.requireNonNull(getIntent().getExtras()).getInt("ID");
 //                sqLiteHelper.deleteMemo(sqLiteDatabase, "id", String.valueOf(deleteId));
                 MemoDetail memoDetail = new MemoDetail();
-                memoDetail.id =  deleteId;
+                memoDetail.setId(deleteId);
                 memoDeleteTask = new MemoDeleteTask();
                 memoDeleteTask.execute(memoDetail);
             }
@@ -141,7 +141,7 @@ public class MemoDetailActivity extends AppCompatActivity {
         @Override
         protected Boolean doInBackground(MemoDetail... memoDetail) {
             appRoomDatabase = AppRoomDatabase.getDatabase(getApplicationContext());
-            appRoomDatabase.memoDetailDao().deleteMemo(memoDetail[0]);
+            Objects.requireNonNull(appRoomDatabase).memoDetailDao().deleteMemo(memoDetail[0]);
             return true;
         }
 
@@ -161,9 +161,9 @@ public class MemoDetailActivity extends AppCompatActivity {
         protected Boolean doInBackground(MemoDetail... memoDetail) {
             appRoomDatabase = AppRoomDatabase.getDatabase(getApplicationContext());
             //DAOごと更新するため、一度呼び出す
-            mMemoDetail = appRoomDatabase.memoDetailDao().loadMemo(memoDetail[0].id);
-            mMemoDetail.title = String.valueOf(editTitle.getText());
-            mMemoDetail.content = String.valueOf(editContent.getText());
+            mMemoDetail = Objects.requireNonNull(appRoomDatabase).memoDetailDao().loadMemo(memoDetail[0].getId());
+            mMemoDetail.setTitle(String.valueOf(editTitle.getText()));
+            mMemoDetail.setContent(String.valueOf(editContent.getText()));
             appRoomDatabase.memoDetailDao().updateMemo(mMemoDetail);
             return true;
         }
@@ -182,7 +182,7 @@ public class MemoDetailActivity extends AppCompatActivity {
         @Override
         protected Boolean doInBackground(MemoDetail... memoDetail) {
             appRoomDatabase = AppRoomDatabase.getDatabase(getApplicationContext());
-            appRoomDatabase.memoDetailDao().InsertMemo(memoDetail[0]);
+            Objects.requireNonNull(appRoomDatabase).memoDetailDao().insertMemo(memoDetail[0]);
             return true;
         }
 
@@ -209,7 +209,7 @@ public class MemoDetailActivity extends AppCompatActivity {
             if(getIntent().hasExtra("ID")){
                 int id = Objects.requireNonNull(getIntent().getExtras()).getInt("ID");
                 appRoomDatabase = AppRoomDatabase.getDatabase(getApplicationContext());
-                memoDetail = appRoomDatabase.memoDetailDao().loadMemo(id);
+                memoDetail = Objects.requireNonNull(appRoomDatabase).memoDetailDao().loadMemo(id);
             }
             return true;
         }
@@ -228,12 +228,12 @@ public class MemoDetailActivity extends AppCompatActivity {
 
 
                     //メモのタイトルと内容を設定
-                    editTitle.setText(memoDetail.title);
-                    editContent.setText(memoDetail.content);
+                    editTitle.setText(memoDetail.getTitle());
+                    editContent.setText(memoDetail.getContent());
 
                     //ツールバーにタイトルを設定
                     toolbar = findViewById(R.id.toolbar);
-                    toolbar.setTitle(memoDetail.title);
+                    toolbar.setTitle(memoDetail.getTitle());
                     setSupportActionBar(toolbar);
                 }
 
