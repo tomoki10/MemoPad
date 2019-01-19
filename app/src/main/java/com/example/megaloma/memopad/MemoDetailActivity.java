@@ -42,7 +42,7 @@ public class MemoDetailActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_memo_detail);
+        setContentView(R.layout.memo_detail_frame);
     }
 
     //画面で表示するオブジェクトを定義
@@ -55,7 +55,7 @@ public class MemoDetailActivity extends AppCompatActivity {
         memoDetailGetTask.execute((Void) null);
 
         //保存ボタンの実装
-        fab = findViewById(R.id.fab);
+        fab = findViewById(R.id.detail_fab);
         fab.setOnClickListener(view -> {
             //メモのタイトルを取得
             String title = String.valueOf(editTitle.getText());
@@ -96,12 +96,18 @@ public class MemoDetailActivity extends AppCompatActivity {
         super.onPause();
         fab = null;
         toolbar = null;
-        editTitle = null;
-        editContent = null;
         memoDetailGetTask = null;
         memoInsertTask = null;
         memoUpdateTask = null;
         memoDeleteTask = null;
+    }
+
+    //画面内のオブジェクトを破棄
+    @Override
+    protected void onDestroy(){
+        super.onDestroy();
+        editTitle = null;
+        editContent = null;
     }
 
 
