@@ -29,8 +29,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private var adapter: ArrayAdapter<String>? = null
     private var listView: ListView? = null
 
-    //Room呼び出し
-    private var appRoomDatabase: AppRoomDatabase? = null
     private var memoDetails: List<MemoDetail>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -102,7 +100,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         // Handle navigation view item clicks here.
         val id = item.itemId
 
-        val intent = Intent(Intent.ACTION_GET_CONTENT)
+        val intent = Intent()
         intent.type = DocumentsContract.Document.MIME_TYPE_DIR
 
         if (id == R.id.nav_upload) {
@@ -127,10 +125,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private fun memoGetCoroutines(){
 
         GlobalScope.launch{
+
+            //Room呼び出し
+            val appRoomDatabase: AppRoomDatabase = AppRoomDatabase.getDatabase(applicationContext)!!
             //別画面から遷移している時のため初期化
             val list: List<MemoDetail> = Objects.requireNonNull<AppRoomDatabase>(appRoomDatabase).memoDetailDao().loadMemoAll()
-
-            appRoomDatabase = AppRoomDatabase.getDatabase(applicationContext)
             memoDetails = list
 
             //取得したDBのカラムをセット
