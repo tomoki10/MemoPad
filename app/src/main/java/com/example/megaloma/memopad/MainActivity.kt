@@ -1,6 +1,5 @@
 package com.example.megaloma.memopad
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.provider.DocumentsContract
@@ -27,12 +26,12 @@ import java.util.*
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     // 画面上に表示されるメモを保持するリスト
-    internal var adapter: ArrayAdapter<String>? = null
-    internal var listView: ListView? = null
+    private var adapter: ArrayAdapter<String>? = null
+    private var listView: ListView? = null
 
     //Room呼び出し
-    internal var appRoomDatabase: AppRoomDatabase? = null
-    internal var memoDetails: List<MemoDetail>? = null
+    private var appRoomDatabase: AppRoomDatabase? = null
+    private var memoDetails: List<MemoDetail>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -93,14 +92,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
 
-
         return if (id == R.id.action_settings) {
             true
         } else super.onOptionsItemSelected(item)
 
     }
 
-    @SuppressLint("ShowToast")
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         // Handle navigation view item clicks here.
         val id = item.itemId
@@ -146,7 +143,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             listView!!.adapter = adapter
 
             //Itemごとにクリックリスナーを設定
-            listView!!.setOnItemClickListener { parent, view, position, id ->
+            listView!!.setOnItemClickListener { _, _, position, _ ->
                 //開きたいメモの番号(レコードのID)を付与して詳細画面に移動
                 val intent = Intent(application, MemoDetailActivity::class.java)
                 intent.putExtra("ID", Integer.valueOf(list[position].id))
